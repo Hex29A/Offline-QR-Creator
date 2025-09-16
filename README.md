@@ -2,6 +2,8 @@
 
 A simple, fast, and **browser-based** QR code generator that works completely offline. There's no need for an internet connection after the page loads, as all the logic runs locally in your browser.
 
+[**▶️ Try the Live Demo**](https://hex29a.github.io/Offline-QR-Creator)
+
 ---
 
 ## Features ✨
