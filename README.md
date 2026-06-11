@@ -1,34 +1,38 @@
 # Offline QR Creator 💾
 
-A simple, fast, and **browser-based** QR code generator that works completely offline. There's no need for an internet connection after the page loads, as all the logic runs locally in your browser.
+A fast, modern, **truly offline** QR code generator. One self-contained HTML file — the QR library is embedded, no CDN, no network requests, nothing leaves your browser.
 
-[**▶️ Try the Live Demo**](https://hex29a.github.io/Offline-QR-Creator)
+[**▶️ Open the app**](https://hex29a.github.io/Offline-QR-Creator)
+
+![Offline QR Creator — live QR generation with format chips and dark theme](docs/screenshot.png)
 
 ---
 
 ## Features ✨
 
-* **Diverse Formats**: Generate QR codes for various data types, including URLs, text, Wi-Fi credentials, vCards, emails, SMS, and geolocation.
-* **Offline Functionality**: The entire application runs directly in your web browser, with no server-side processing.
-* **Instant Generation**: Create and view your QR codes in real-time as you type.
-* **Downloadable Output**: Save your generated QR code as a **PNG** file with a single click.
+* **8 formats**: URL, plain text, WiFi credentials, contact (vCard), email, SMS, phone, geo-location
+* **Live generation** — the QR code updates as you type, no button to press
+* **Truly offline** — the QR library ([qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator), MIT) is embedded in the page; zero external requests
+* **Installable PWA** — add it to your home screen and it works with no connection at all
+* **Export**: download as **PNG** (256/512/1024 px) or **SVG**, or copy straight to the clipboard
+* **Error correction** selectable (L/M/Q/H)
+* **UTF-8 safe** — åäö, emoji and any Unicode text encode correctly
+* **WiFi escaping** per spec — SSIDs and passwords with `; , : " \` work
+* **Dark/light theme** — follows your system, with a manual toggle (auto → dark → light)
 
----
+## How to use 🚀
 
-## Technologies 🛠️
+1. Open the [live app](https://hex29a.github.io/Offline-QR-Creator) — or download `index.html` and open it locally, it works identically.
+2. Pick a format chip, fill in the fields. The QR code renders live.
+3. Download as PNG/SVG or copy to the clipboard.
 
-* **HTML**: Provides the core structure.
-* **Tailwind CSS**: Used for efficient and responsive styling.
-* **JavaScript**: Powers the application logic and user interactions.
-* **QRCode.js**: A lightweight library for client-side QR code generation.
+## Tech 🛠️
 
----
+* Single `index.html` — vanilla HTML/CSS/JS, no frameworks, no build step
+* [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (MIT) embedded inline, UTF-8 mode enabled
+* [Lucide](https://lucide.dev) icons (ISC) as inline SVG
+* `manifest.json` + service worker for installable, offline-capable PWA
 
-## How to Use 🚀
+## License
 
-1.  **Download** the `index.html` file from this repository.
-2.  **Open** the file in any modern web browser (like Chrome, Firefox, or Safari).
-3.  **Select** a data type from the dropdown menu.
-4.  **Enter** your information in the fields that appear.
-5.  Click the "Generate QR Code" button to see your code.
-6.  Click "Download PNG" to save the image to your computer.
+MIT — see [LICENSE](LICENSE).
