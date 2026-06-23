@@ -1,4 +1,4 @@
-const CACHE = 'qr-creator-v1';
+const CACHE = 'qr-creator-v2';
 const STATIC = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -20,8 +20,11 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
     fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy));
+      // Only cache successful same-origin responses; skip errors/opaque.
+      if (res.ok && res.type === 'basic') {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+      }
       return res;
     }).catch(() => caches.match(e.request))
   );

@@ -2642,6 +2642,10 @@ function icon(name) {
 // WiFi special characters are escaped per the WIFI: URI spec.
 const wifiEscape = s => s.replace(/([\\;,:"])/g, '\\$1');
 
+// vCard text values must escape backslash, comma, semicolon and newlines
+// per RFC 6350 / 2426 so structured fields (N, ORG, …) aren't corrupted.
+const vcardEscape = s => s.replace(/([\\;,])/g, '\\$1').replace(/\r?\n/g, '\\n');
+
 const FORMATS = {
   url: {
     label: 'URL', icon: 'link',
@@ -2675,12 +2679,14 @@ const FORMATS = {
     ],
     build: v => {
       if (!v.firstName.trim() && !v.lastName.trim()) return '';
+      const e = vcardEscape;
+      const first = v.firstName.trim(), last = v.lastName.trim();
       const lines = ['BEGIN:VCARD', 'VERSION:3.0',
-        `N:${v.lastName};${v.firstName};;;`,
-        `FN:${(v.firstName + ' ' + v.lastName).trim()}`];
-      if (v.phone.trim()) lines.push(`TEL:${v.phone.trim()}`);
-      if (v.email.trim()) lines.push(`EMAIL:${v.email.trim()}`);
-      if (v.org.trim()) lines.push(`ORG:${v.org.trim()}`);
+        `N:${e(last)};${e(first)};;;`,
+        `FN:${e((first + ' ' + last).trim())}`];
+      if (v.phone.trim()) lines.push(`TEL:${e(v.phone.trim())}`);
+      if (v.email.trim()) lines.push(`EMAIL:${e(v.email.trim())}`);
+      if (v.org.trim()) lines.push(`ORG:${e(v.org.trim())}`);
       lines.push('END:VCARD');
       return lines.join('\n');
     },
@@ -2860,7 +2866,7 @@ function setButtons(on) {
 function qrToCanvas(size) {
   const modules = currentQr.getModuleCount();
   const margin = 4; // quiet zone, in modules
-  const cell = Math.floor(size / (modules + margin * 2));
+  const cell = Math.max(1, Math.floor(size / (modules + margin * 2)));
   const real = cell * (modules + margin * 2);
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = real;
