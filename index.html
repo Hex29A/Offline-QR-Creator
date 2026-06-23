@@ -2914,26 +2914,29 @@ $btnCopy.addEventListener('click', () => {
   }, 'image/png');
 });
 
-// === Theme toggle: auto → dark → light ===
+// === Theme toggle ===
+// A click always flips the *visible* theme so a single press reacts, even
+// when "auto" currently happens to match the system appearance. "auto" is
+// the default until the user first interacts.
 const $btnTheme = document.getElementById('btn-theme');
-const THEME_ORDER = ['auto', 'dark', 'light'];
 const THEME_ICONS = { auto: 'monitor', dark: 'moon', light: 'sun' };
+const systemPrefersDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+const isDark = mode => mode === 'dark' || (mode === 'auto' && systemPrefersDark());
 let themeMode = localStorage.getItem('qr_theme');
-if (!THEME_ORDER.includes(themeMode)) themeMode = 'auto';
+if (!THEME_ICONS[themeMode]) themeMode = 'auto';
 
 function applyTheme(mode) {
   if (mode === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', mode);
   $btnTheme.innerHTML = icon(THEME_ICONS[mode]);
   $btnTheme.title = 'Theme: ' + mode;
-  const dark = mode === 'dark' ||
-    (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const dark = isDark(mode);
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', dark ? '#0f1115' : '#eef0f4');
 }
 applyTheme(themeMode);
 $btnTheme.addEventListener('click', () => {
-  themeMode = THEME_ORDER[(THEME_ORDER.indexOf(themeMode) + 1) % THEME_ORDER.length];
+  themeMode = isDark(themeMode) ? 'light' : 'dark';
   localStorage.setItem('qr_theme', themeMode);
   applyTheme(themeMode);
 });
